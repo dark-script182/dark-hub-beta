@@ -1,11 +1,38 @@
--- Create the main GUI elements
+-- Utility functions
+local function createButtonWithCorner(name, parent, position, text)
+    local button = Instance.new("TextButton")
+    local corner = Instance.new("UICorner")
+    
+    button.Name = name
+    button.Parent = parent
+    button.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+    button.Position = position
+    button.Size = UDim2.new(0.8, 0, 0, 40)
+    button.Font = Enum.Font.GothamSemibold
+    button.Text = text
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.TextSize = 16.000
+    
+    corner.Parent = button
+    corner.CornerRadius = UDim.new(0, 8)
+    
+    return button
+end
+
+-- Create main GUI elements
 local ScreenGui = Instance.new("ScreenGui")
 local MainFrame = Instance.new("Frame")
 local UICorner = Instance.new("UICorner")
 local Title = Instance.new("TextLabel")
+local TabsFrame = Instance.new("Frame")
 local ScriptsFrame = Instance.new("Frame")
+local TSBFrame = Instance.new("Frame")
+local LoadingFrame = Instance.new("Frame")
+local LoadingText = Instance.new("TextLabel")
+local LoadingSpinner = Instance.new("ImageLabel")
+local CloseButton = Instance.new("TextButton")
 
--- Set parent for ScreenGui
+-- Configure ScreenGui
 ScreenGui.Parent = game:GetService("CoreGui")
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
@@ -13,12 +40,11 @@ ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
 MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-MainFrame.Position = UDim2.new(0.5, -150, 0.5, -100)
-MainFrame.Size = UDim2.new(0, 300, 0, 200)
+MainFrame.Position = UDim2.new(0.5, -200, 0.5, -150)
+MainFrame.Size = UDim2.new(0, 400, 0, 300)
 MainFrame.Active = true
 MainFrame.Draggable = true
 
--- Add rounded corners to MainFrame
 UICorner.Parent = MainFrame
 UICorner.CornerRadius = UDim.new(0, 10)
 
@@ -26,7 +52,7 @@ UICorner.CornerRadius = UDim.new(0, 10)
 Title.Name = "Title"
 Title.Parent = MainFrame
 Title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Title.BackgroundTransparency = 1.000
+Title.BackgroundTransparency = 1
 Title.Position = UDim2.new(0, 0, 0, 10)
 Title.Size = UDim2.new(1, 0, 0, 30)
 Title.Font = Enum.Font.GothamBold
@@ -34,110 +60,300 @@ Title.Text = "Dark Hub"
 Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 Title.TextSize = 22.000
 
--- Configure Scripts Frame
+-- Configure Tabs Frame
+TabsFrame.Name = "TabsFrame"
+TabsFrame.Parent = MainFrame
+TabsFrame.BackgroundTransparency = 1
+TabsFrame.Position = UDim2.new(0, 0, 0.15, 0)
+TabsFrame.Size = UDim2.new(1, 0, 0, 40)
+
+-- Create Tab Buttons
+local MainTabButton = createButtonWithCorner(
+    "MainTabButton",
+    TabsFrame,
+    UDim2.new(0.05, 0, 0, 0),
+    "Main Scripts"
+)
+MainTabButton.Size = UDim2.new(0.4, 0, 1, 0)
+
+local TSBTabButton = createButtonWithCorner(
+    "TSBTabButton",
+    TabsFrame,
+    UDim2.new(0.55, 0, 0, 0),
+    "The Strongest Battlegrounds"
+)
+TSBTabButton.Size = UDim2.new(0.4, 0, 1, 0)
+
+-- Configure Scripts Frames
 ScriptsFrame.Name = "ScriptsFrame"
 ScriptsFrame.Parent = MainFrame
 ScriptsFrame.BackgroundTransparency = 1
-ScriptsFrame.Position = UDim2.new(0, 0, 0.2, 0)
-ScriptsFrame.Size = UDim2.new(1, 0, 0.8, 0)
+ScriptsFrame.Position = UDim2.new(0, 0, 0.3, 0)
+ScriptsFrame.Size = UDim2.new(1, 0, 0.7, 0)
+ScriptsFrame.Visible = true
 
--- Create script buttons
-local Button1 = Instance.new("TextButton")
-local Button2 = Instance.new("TextButton")
-local Button3 = Instance.new("TextButton")
-local UICorner_2 = Instance.new("UICorner")
-local UICorner_3 = Instance.new("UICorner")
-local UICorner_4 = Instance.new("UICorner")
+TSBFrame.Name = "TSBFrame"
+TSBFrame.Parent = MainFrame
+TSBFrame.BackgroundTransparency = 1
+TSBFrame.Position = UDim2.new(0, 0, 0.3, 0)
+TSBFrame.Size = UDim2.new(1, 0, 0.7, 0)
+TSBFrame.Visible = false
 
-Button1.Name = "KadeHubButton"
-Button1.Parent = ScriptsFrame
-Button1.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-Button1.Position = UDim2.new(0.1, 0, 0.1, 0)
-Button1.Size = UDim2.new(0.8, 0, 0, 40)
-Button1.Font = Enum.Font.GothamSemibold
-Button1.Text = "Execute KadeHub"
-Button1.TextColor3 = Color3.fromRGB(255, 255, 255)
-Button1.TextSize = 16.000
-UICorner_2.Parent = Button1
+-- Create script buttons for Main tab
+local Button1 = createButtonWithCorner(
+    "KadeHubButton",
+    ScriptsFrame,
+    UDim2.new(0.1, 0, 0.1, 0),
+    "Execute KadeHub"
+)
 
-Button2.Name = "PrizzLifeButton"
-Button2.Parent = ScriptsFrame
-Button2.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-Button2.Position = UDim2.new(0.1, 0, 0.4, 0)
-Button2.Size = UDim2.new(0.8, 0, 0, 40)
-Button2.Font = Enum.Font.GothamSemibold
-Button2.Text = "Execute PrizzLife"
-Button2.TextColor3 = Color3.fromRGB(255, 255, 255)
-Button2.TextSize = 16.000
-UICorner_3.Parent = Button2
+local Button2 = createButtonWithCorner(
+    "PrizzLifeButton",
+    ScriptsFrame,
+    UDim2.new(0.1, 0, 0.4, 0),
+    "Execute PrizzLife"
+)
 
-Button3.Name = "PrisonWareButton"
-Button3.Parent = ScriptsFrame
-Button3.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-Button3.Position = UDim2.new(0.1, 0, 0.7, 0)
-Button3.Size = UDim2.new(0.8, 0, 0, 40)
-Button3.Font = Enum.Font.GothamSemibold
-Button3.Text = "Execute PrisonWare"
-Button3.TextColor3 = Color3.fromRGB(255, 255, 255)
-Button3.TextSize = 16.000
-UICorner_4.Parent = Button3
+local Button3 = createButtonWithCorner(
+    "PrisonWareButton",
+    ScriptsFrame,
+    UDim2.new(0.1, 0, 0.7, 0),
+    "Execute PrisonWare"
+)
 
--- Button click handlers with error handling
-Button1.MouseButton1Click:Connect(function()
+-- Create VexonHub button for TSB tab
+local VexonButton = createButtonWithCorner(
+    "VexonHubButton",
+    TSBFrame,
+    UDim2.new(0.1, 0, 0.3, 0),
+    "Execute VexonHub"
+)
+
+-- Configure Loading Frame
+LoadingFrame.Name = "LoadingFrame"
+LoadingFrame.Parent = MainFrame
+LoadingFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+LoadingFrame.BackgroundTransparency = 0.5
+LoadingFrame.Size = UDim2.new(1, 0, 1, 0)
+LoadingFrame.Visible = false
+LoadingFrame.ZIndex = 10
+
+LoadingText.Name = "LoadingText"
+LoadingText.Parent = LoadingFrame
+LoadingText.BackgroundTransparency = 1
+LoadingText.Position = UDim2.new(0, 0, 0.4, 0)
+LoadingText.Size = UDim2.new(1, 0, 0, 30)
+LoadingText.Font = Enum.Font.GothamSemibold
+LoadingText.Text = "Loading..."
+LoadingText.TextColor3 = Color3.fromRGB(255, 255, 255)
+LoadingText.TextSize = 18.000
+LoadingText.ZIndex = 11
+
+LoadingSpinner.Name = "LoadingSpinner"
+LoadingSpinner.Parent = LoadingFrame
+LoadingSpinner.BackgroundTransparency = 1
+LoadingSpinner.Position = UDim2.new(0.5, -15, 0.3, -15)
+LoadingSpinner.Size = UDim2.new(0, 30, 0, 30)
+LoadingSpinner.Image = "rbxassetid://4965945816"
+LoadingSpinner.ZIndex = 11
+
+-- Create spinner animation
+local spinnerTween = game:GetService("TweenService"):Create(
+    LoadingSpinner,
+    TweenInfo.new(1, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1),
+    {Rotation = 360}
+)
+
+-- Create notification system
+local NotificationFrame = Instance.new("Frame")
+NotificationFrame.Name = "NotificationFrame"
+NotificationFrame.Parent = MainFrame
+NotificationFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+NotificationFrame.Position = UDim2.new(0.5, -150, 0.9, 0)
+NotificationFrame.Size = UDim2.new(0, 300, 0, 30)
+NotificationFrame.Visible = false
+NotificationFrame.ZIndex = 12
+
+local NotificationText = Instance.new("TextLabel")
+NotificationText.Name = "NotificationText"
+NotificationText.Parent = NotificationFrame
+NotificationText.BackgroundTransparency = 1
+NotificationText.Size = UDim2.new(1, 0, 1, 0)
+NotificationText.Font = Enum.Font.GothamSemibold
+NotificationText.TextColor3 = Color3.fromRGB(255, 255, 255)
+NotificationText.TextSize = 14.000
+NotificationText.ZIndex = 13
+
+local NotificationCorner = Instance.new("UICorner")
+NotificationCorner.Parent = NotificationFrame
+NotificationCorner.CornerRadius = UDim.new(0, 8)
+
+-- Function to show notification
+local function showNotification(text, color, duration)
+    NotificationFrame.BackgroundColor3 = color or Color3.fromRGB(40, 40, 40)
+    NotificationText.Text = text
+    NotificationFrame.Visible = true
+    
+    game:GetService("TweenService"):Create(
+        NotificationFrame,
+        TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+        {Position = UDim2.new(0.5, -150, 0.85, 0)}
+    ):Play()
+    
+    wait(duration or 2)
+    
+    game:GetService("TweenService"):Create(
+        NotificationFrame,
+        TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
+        {Position = UDim2.new(0.5, -150, 0.9, 0)}
+    ):Play()
+    
+    wait(0.3)
+    NotificationFrame.Visible = false
+end
+
+-- Modify executeScript function to show notifications
+local function executeScript(scriptName, url)
+    LoadingText.Text = "Loading " .. scriptName .. "..."
+    LoadingFrame.Visible = true
+    spinnerTween:Play()
+    
     local success, result = pcall(function()
-        -- Check if getgenv exists
         if type(_G.getgenv) == "function" then
             pcall(function() _G.DisableWarning = false end)
         end
         
         local success, content = pcall(function()
-            return game:HttpGet("https://raw.githubusercontent.com/skibiditoiletfan2007/KadeHubRepository/main/Latest.lua")
+            return game:HttpGet(url)
         end)
         
         if success and content then
             loadstring(content)()
+            showNotification(scriptName .. " executed successfully!", Color3.fromRGB(60, 200, 60))
         else
-            warn("Failed to load KadeHub:", content)
+            warn("Failed to load " .. scriptName .. ":", content)
+            showNotification("Failed to load " .. scriptName, Color3.fromRGB(200, 60, 60))
         end
     end)
     
+    LoadingFrame.Visible = false
+    spinnerTween:Pause()
+    
     if not success then
-        warn("Error executing KadeHub:", result)
+        warn("Error executing " .. scriptName .. ":", result)
+        showNotification("Error executing " .. scriptName, Color3.fromRGB(200, 60, 60))
     end
+end
+
+-- Tab switching function
+local function switchTab(tabName)
+    ScriptsFrame.Visible = tabName == "Main"
+    TSBFrame.Visible = tabName == "TSB"
+    
+    MainTabButton.BackgroundColor3 = tabName == "Main" 
+        and Color3.fromRGB(60, 60, 60) 
+        or Color3.fromRGB(45, 45, 45)
+    
+    TSBTabButton.BackgroundColor3 = tabName == "TSB" 
+        and Color3.fromRGB(60, 60, 60) 
+        or Color3.fromRGB(45, 45, 45)
+end
+
+-- Button click handlers
+MainTabButton.MouseButton1Click:Connect(function()
+    switchTab("Main")
+end)
+
+TSBTabButton.MouseButton1Click:Connect(function()
+    switchTab("TSB")
+end)
+
+Button1.MouseButton1Click:Connect(function()
+    executeScript("KadeHub", "https://raw.githubusercontent.com/skibiditoiletfan2007/KadeHubRepository/main/Latest.lua")
 end)
 
 Button2.MouseButton1Click:Connect(function()
-    local success, result = pcall(function()
-        local success, content = pcall(function()
-            return game:HttpGet('https://raw.githubusercontent.com/devguy100/PrizzLife/main/Source/release_v0.8.1.lua')
-        end)
-        
-        if success and content then
-            loadstring(content)()
-        else
-            warn("Failed to load PrizzLife:", content)
-        end
-    end)
-    
-    if not success then
-        warn("Error executing PrizzLife:", result)
-    end
+    executeScript("PrizzLife", "https://raw.githubusercontent.com/devguy100/PrizzLife/main/Source/release_v0.8.1.lua")
 end)
 
 Button3.MouseButton1Click:Connect(function()
-    local success, result = pcall(function()
-        local success, content = pcall(function()
-            return game:HttpGet("https://raw.githubusercontent.com/Denverrz/scripts/master/PRISONWARE_v1.3.txt")
-        end)
-        
-        if success and content then
-            loadstring(content)()
-        else
-            warn("Failed to load PrisonWare:", content)
-        end
+    executeScript("PrisonWare", "https://raw.githubusercontent.com/Denverrz/scripts/master/PRISONWARE_v1.3.txt")
+end)
+
+VexonButton.MouseButton1Click:Connect(function()
+    executeScript("VexonHub", "https://raw.githubusercontent.com/DiosDi/VexonHub/refs/heads/main/VexonHub")
+end)
+
+-- Close button handler
+CloseButton.MouseButton1Click:Connect(function()
+    ScreenGui:Destroy()
+end)
+
+-- Add hover effects
+local function addHoverEffect(button)
+    local originalColor = button.BackgroundColor3
+    local hoverColor = Color3.fromRGB(60, 60, 60)
+    
+    button.MouseEnter:Connect(function()
+        button.BackgroundColor3 = hoverColor
     end)
     
-    if not success then
-        warn("Error executing PrisonWare:", result)
-    end
+    button.MouseLeave:Connect(function()
+        button.BackgroundColor3 = originalColor
+    end)
+end
+
+addHoverEffect(Button1)
+addHoverEffect(Button2)
+addHoverEffect(Button3)
+addHoverEffect(VexonButton)
+
+-- Set initial tab
+switchTab("Main")
+
+-- Create minimize button
+local MinimizeButton = Instance.new("TextButton")
+MinimizeButton.Name = "MinimizeButton"
+MinimizeButton.Parent = MainFrame
+MinimizeButton.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+MinimizeButton.Position = UDim2.new(1, -55, 0, 10)
+MinimizeButton.Size = UDim2.new(0, 20, 0, 20)
+MinimizeButton.Font = Enum.Font.GothamBold
+MinimizeButton.Text = "-"
+MinimizeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+MinimizeButton.TextSize = 14.000
+
+local minimizeCorner = Instance.new("UICorner")
+minimizeCorner.Parent = MinimizeButton
+minimizeCorner.CornerRadius = UDim.new(0, 5)
+
+-- Add minimize functionality
+local isMinimized = false
+MinimizeButton.MouseButton1Click:Connect(function()
+    isMinimized = not isMinimized
+    local targetSize = isMinimized and UDim2.new(0, 400, 0, 50) or UDim2.new(0, 400, 0, 300)
+    local targetPos = isMinimized and UDim2.new(0.5, -200, 0, 10) or UDim2.new(0.5, -200, 0.5, -150)
+    
+    local sizeTween = game:GetService("TweenService"):Create(
+        MainFrame,
+        TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+        {Size = targetSize}
+    )
+    
+    local posTween = game:GetService("TweenService"):Create(
+        MainFrame,
+        TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+        {Position = targetPos}
+    )
+    
+    TabsFrame.Visible = not isMinimized
+    ScriptsFrame.Visible = not isMinimized
+    TSBFrame.Visible = not isMinimized
+    
+    sizeTween:Play()
+    posTween:Play()
 end)
+
+-- Add hover effects for control buttons
+addHoverEffect(MinimizeButton)
+addHoverEffect(CloseButton)
